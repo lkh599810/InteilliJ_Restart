@@ -1,0 +1,67 @@
+
+buildscript { // 빌드 자체를 위한 ext / repositories / dependencies 추가
+    ext { // 전역변수를 설정
+        springBootVersion = '2.1.7.RELEASE'
+    }
+    repositories { //buildscript 내의 의존성을 어떤 원격 저장소에서 다운로드 받을지 설정
+        mavenCentral()
+        jcenter()
+    }
+    dependencies { // 빌드를 위한 의존성 추가 ,
+        // spring-boot-gradle-plugin 을 스프링부트 버전에 맞춰 설정
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+// 프로젝트에 포함될 플러그인을 설정
+// dependencies 에 비해 좀 더 폭넓게 쓰이고 core 한 외부패키지임
+
+group 'com.soriel.music'
+version '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
+//컴파일 시에 지정될 그룹, 버전, 소스호환성을 설정
+
+repositories {
+// 1.프로젝트에 추가될 의존성을 다운로드할 원격 저장소 설정
+// 2.mavenCentral 은 전통적인 저장소이나, 사용자 라이브러리를 업로드하는것이 어려움
+// 3.jcenter 는 라이브러리 업로드가 간단하다. mavenCentral 에도 업로드되도록 자동화
+    mavenCentral()
+}
+
+dependencies {  // 프로젝트에 추가될 의존성을 설정
+    // 스프링부트
+    compile('org.springframework.boot:spring-boot-starter-web');
+
+    // 롬북 : 자동 생성자 , get 메소드 , set 메소드 등 클래스 메모리할당을 효율적으로 사용가능
+    compileOnly('org.projectlombok:lombok')
+    annotationProcessor('org.projectlombok:lombok')
+
+    //시큐리티 : 보안관련 @어노테이션 제공
+    compile('org.springframework.boot:spring-boot-starter-security')
+
+    //타임리프 : html css img 정적파일 연결
+    implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
+    implementation('org.thymeleaf.extras:thymeleaf-extras-springsecurity5')
+
+    //jpa : jpa 사용
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+
+    //h2 : 관계형 데이터베이스 제공
+    compile('com.h2database:h2')
+
+//    //oauth2 : 소셜로그인
+//    compile('org.springframework.boot:spring-boot-starter-oauth2-client')
+
+    //파일 의존관계 설정
+    compile('org.springframework.boot:spring-boot-devtools')
+
+//    //DB설치
+//    compile('org.mariadb.jdbc:mariadb-java-client')
+
+}
+
